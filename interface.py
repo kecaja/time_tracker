@@ -1,22 +1,28 @@
 from operator import is_
 import tkinter
 import time
+from datetime import timedelta
 
 def start_clicked():
+    global started
     global log
     global is_paused
-    global started
     if is_paused:
-        now = time.localtime(int(time.time()))
+        is_paused = False
+        started = time.time()
+        now = time.localtime(int(started))
         output_info = "started: " + str(time.strftime("%H:%M:%S", now))
         log.set(output_info)
-        is_paused = False
+        
 
-def pause_clicked():
+def stop_clicked():
     global log
     global is_paused
     if not is_paused:
-        elapsed = 
+        is_paused = True
+        elapsed = time.time() - started
+        output_info = "elapsed: " + str(timedelta(seconds=elapsed))
+        log.set(output_info)
 
 is_paused = True
 started = 0
@@ -32,13 +38,9 @@ header.pack(side="bottom", ipady=10)
 
 starter = tkinter.Button(app, text="start", command= start_clicked)
 starter.pack(side="top", ipady=10, ipadx=10, fill="x")
-# starter.grid(row=0, column=1)
 
-pause = tkinter.Button(app, text="pause", command= start_clicked)
-pause.pack(side="top", ipady=10, ipadx=10, fill="x")
-# pause.grid(row=0, column=3)
 
-stop = tkinter.Button(app, text="stop and sync", command= start_clicked)
+stop = tkinter.Button(app, text="stop and sync", command= stop_clicked)
 stop.pack(side="top", ipady=10, ipadx=10, fill="x")
 
 app.mainloop()
